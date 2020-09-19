@@ -79,10 +79,10 @@ function choque_wall(head) {
 function dibujar() {
     ctx.drawImage(fondo, 0, 0);
     for (let i = 0; i < snake.length; i++) {
-        ctx.fillStyle = (i == 0) ? "green" : "white";
+        ctx.fillStyle = (i == 0) ? "#005306" : "#131212";
         ctx.fillRect(snake[i].x, snake[i].y, box, box);
 
-        ctx.strokeStyle = "red";
+        ctx.strokeStyle = "#005306";
         ctx.strokeRect(snake[i].x, snake[i].y, box, box);
     }
 
