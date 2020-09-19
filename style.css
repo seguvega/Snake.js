@@ -1,0 +1,8 @@
+body {
+    background-color: black;
+}
+
+#snake {
+    width: 100%;
+    height: 98vh;
+}
