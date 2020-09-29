@@ -80,6 +80,7 @@ function dibujar() {
     ctx.drawImage(fondo, 0, 0);
     for (let i = 0; i < snake.length; i++) {
         ctx.fillStyle = (i == 0) ? "#005306" : "#131212";
+        ctx.lineWidth = 6;
         ctx.fillRect(snake[i].x, snake[i].y, box, box);
 
         ctx.strokeStyle = "#005306";
