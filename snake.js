@@ -4,7 +4,8 @@ const ctx = cvs.getContext("2d");
 //Creamos una Unidad
 const box = 38;
 
-var vel = 160;
+cvs.width = cvs.height = 1024;
+var vel = 130;
 
 //Cargamos imagenes
 const fondo = new Image();
@@ -27,16 +28,18 @@ snake[0] = {
 
 //Creamos el metodo Comida
 function comida() {
-    let food = {
+    return {
         x: Math.floor(Math.random() * 26) * box,
         y: Math.floor(Math.random() * 26) * box
-    }
-    return food;
+    };
 }
 let food = comida();
 
 //Creamos eL puntaje
 let score = 0;
+
+//Variable del fin del juego
+var end = false;
 
 //Controlar la serpiente
 ///Es el unico metodo q se repite porq se acciona cuando se detecta un evento del teclado
@@ -89,6 +92,7 @@ function dibujar() {
 
     ctx.drawImage(imgfood, food.x, food.y, box * 1.3, box * 1.3);
 
+
     //Posicion antigua de la cabeza
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
@@ -118,17 +122,20 @@ function dibujar() {
     }
 
     let newHead = {
-        x: snakeX,
-        y: snakeY
-    }
-    console.log(newHead);
+            x: snakeX,
+            y: snakeY
+        }
+        //console.log(newHead);
+
     //Game Over
     //Se pone aqui antes de remplazar la nueva cabeza
     if (choque(newHead, snake) || choque_wall(newHead)) {
         muerte.play();
-        clearInterval(game);
+        // para la forma 2 ->clearInterval(game);
         ctx.fillText("GAME OVER Press F5", 8 * box, 13 * box);
+        end = true;
     }
+
     //Se agrega la nueva Cabeza 
     snake.unshift(newHead);
 
@@ -139,6 +146,25 @@ function dibujar() {
     ctx.fillText(score, box, 1.6 * box);
 
 }
+//Forma 1 se crea una funcion q se vuelve a llamar cada 100ms
 
+function interval() {
+    let intervaloT = vel;
+    requestAnimationFrame(dibujar)
+    if (score >= 5) {
+        intervaloT = intervaloT - (score * 2);
+    }
+    if (intervaloT <= 60) {
+        intervaloT = 60;
+    }
+    console.log(intervaloT);
+    let game = setTimeout(interval, intervaloT)
+    if (end) {
+        clearTimeout(game);
+    }
+}
+
+interval();
+//Forma2
 //Llamamos a la funcion dibujar cada 100 ms
-let game = setInterval(dibujar, vel);
+//let game = setInterval(dibujar, vel);
