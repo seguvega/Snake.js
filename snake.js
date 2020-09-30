@@ -4,12 +4,17 @@ const ctx = cvs.getContext("2d");
 //Creamos una Unidad
 const box = 38;
 
-cvs.width = cvs.height = 1024;
+//Velocidad ms de la pantalla
 var vel = 130;
 
+//Tamaño del canvas ancho alto
+var pantalla = 1024
+cvs.width = cvs.height = pantalla;
+
+
 //Cargamos imagenes
-const fondo = new Image();
-fondo.src = "Fotos/back.jpg";
+//const fondo = new Image();
+//fondo.src = "Fotos/back.jpg";
 const imgfood = new Image();
 imgfood.src = "Fotos/cuy.png";
 
@@ -78,20 +83,27 @@ function choque_wall(head) {
 }
 
 
+
 //Funcion dibujar el canvas
 function dibujar() {
-    ctx.drawImage(fondo, 0, 0);
+    //Fondo
+    ctx.fillStyle = "Black";
+    ctx.fillRect(0, 0, pantalla, pantalla);
+    ctx.strokeStyle = "#7AFF33";
+    ctx.strokeRect(0, 0, pantalla, pantalla);
+    //Para dibujar una Imagen -> ctx.drawImage(fondo, 0, 0);
+    //Dibuja la serpiente
     for (let i = 0; i < snake.length; i++) {
-        ctx.fillStyle = (i == 0) ? "#005306" : "#131212";
+        ctx.fillStyle = (i == 0) ? "#7AFF33" : "#131212";
         ctx.lineWidth = 6;
         ctx.fillRect(snake[i].x, snake[i].y, box, box);
 
-        ctx.strokeStyle = "#005306";
+        ctx.strokeStyle = "#7AFF33";
         ctx.strokeRect(snake[i].x, snake[i].y, box, box);
     }
 
+    //Dibuja al cuy
     ctx.drawImage(imgfood, food.x, food.y, box * 1.3, box * 1.3);
-
 
     //Posicion antigua de la cabeza
     let snakeX = snake[0].x;
@@ -132,6 +144,7 @@ function dibujar() {
     if (choque(newHead, snake) || choque_wall(newHead)) {
         muerte.play();
         // para la forma 2 ->clearInterval(game);
+        ctx.fillStyle = "Red";
         ctx.fillText("GAME OVER Press F5", 8 * box, 13 * box);
         end = true;
     }
@@ -146,7 +159,7 @@ function dibujar() {
     ctx.fillText(score, box, 1.6 * box);
 
 }
-//Forma 1 se crea una funcion q se vuelve a llamar cada 100ms
+//Forma 1 se crea una funcion q se vuelve a llamar cada 130ms
 
 function interval() {
     let intervaloT = vel;
@@ -166,5 +179,5 @@ function interval() {
 
 interval();
 //Forma2
-//Llamamos a la funcion dibujar cada 100 ms
+//Llamamos a la funcion dibujar cada 130 ms
 //let game = setInterval(dibujar, vel);
