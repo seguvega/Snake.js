@@ -4,7 +4,7 @@ const ctx = cvs.getContext("2d");
 //Creamos una Unidad
 const box = 38;
 
-//Velocidad ms de la pantalla
+//Velocidad ms (milisegundos) de la pantalla
 var vel = 130;
 
 //Tamaño del canvas ancho alto
@@ -38,6 +38,7 @@ function comida() {
         y: Math.floor(Math.random() * 26) * box
     };
 }
+//Creamos la variable comida para inicializarle
 let food = comida();
 
 //Creamos eL puntaje
@@ -134,10 +135,10 @@ function dibujar() {
     }
 
     let newHead = {
-            x: snakeX,
-            y: snakeY
-        }
-        //console.log(newHead);
+        x: snakeX,
+        y: snakeY
+    }
+    console.log(newHead);
 
     //Game Over
     //Se pone aqui antes de remplazar la nueva cabeza
@@ -159,7 +160,7 @@ function dibujar() {
     ctx.fillText(score, box, 1.6 * box);
 
 }
-//Forma 1 se crea una funcion q se vuelve a llamar cada 130ms
+//Forma 1 se crea una funcion q se vuelve a llamar cada 130milisegundos
 
 function interval() {
     let intervaloT = vel;
