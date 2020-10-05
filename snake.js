@@ -174,6 +174,7 @@ function interval() {
     console.log(intervaloT);
     let game = setTimeout(interval, intervaloT)
     if (end) {
+        alert("Game Over Press F5")
         clearTimeout(game);
     }
 }
