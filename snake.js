@@ -17,6 +17,8 @@ cvs.width = cvs.height = pantalla;
 //fondo.src = "Fotos/back.jpg";
 const imgfood = new Image();
 imgfood.src = "Fotos/cuy.png";
+const imgpiedra = new Image();
+imgpiedra.src = "Fotos/roca.png";
 
 //Cargamos Audio
 const comidamp3 = new Audio();
@@ -31,7 +33,7 @@ snake[0] = {
     y: 12 * box
 }
 
-//Creamos el metodo Comida
+//Creamos el metodo Comida y el obstaculo
 function comida() {
     return {
         x: Math.floor(Math.random() * 26) * box,
@@ -46,6 +48,7 @@ let score = 0;
 
 //Variable del fin del juego
 var end = false;
+
 
 //Controlar la serpiente
 ///Es el unico metodo q se repite porq se acciona cuando se detecta un evento del teclado
@@ -83,7 +86,30 @@ function choque_wall(head) {
     return false;
 }
 
+function obstaculo(snake, cuy) {
+    let piedra = [];
+    for (let e = 0; e < 6; e++) {
+        piedra[e] = comida();
+        for (let i = 0; i < snake.length; i++) {
+            if (snake[i].x == piedra[e].x && snake[i].y == piedra[e].y || piedra[e].x == cuy.x && piedra[e].y == cuy.y || piedra[e].x == box && piedra[e].y == box * 1.6) {
+                piedra[e] = comida();
+                i = 0;
+            }
+        }
+    }
+    return piedra;
+}
 
+var piedra = obstaculo(snake, food);
+
+function choque_obstaculo(obstaculo, head) {
+    for (let i = 0; i < obstaculo.length; i++) {
+        if (obstaculo[i].x == head.x && obstaculo[i].y == head.y) {
+            return true;
+        }
+    }
+    return false;
+}
 
 //Funcion dibujar el canvas
 function dibujar() {
@@ -105,7 +131,17 @@ function dibujar() {
 
     //Dibuja al cuy
     ctx.drawImage(imgfood, food.x, food.y, box * 1.3, box * 1.3);
-
+    //Dibujar Obstaculo
+    for (let i = 0; i < piedra.length; i++) {
+        ctx.fillStyle = "Red";
+        ctx.drawImage(imgpiedra, piedra[i].x, piedra[i].y, box * 1.3, box * 1.3);
+    }
+    /*
+    //Dibuja 1 sola piedra
+    ctx.fillStyle = "Red";
+    ctx.fillRect(piedra[0].x, piedra[0].y, box * 1.3, box * 1.3);
+    console.log("Es la piedra", piedra);
+    */
     //Posicion antigua de la cabeza
     let snakeX = snake[0].x;
     let snakeY = snake[0].y;
@@ -128,6 +164,12 @@ function dibujar() {
     if (snakeX == food.x && snakeY == food.y) {
         score++;
         food = comida();
+        for (let i = 0; i < piedra.length; i++) {
+            if (piedra[i].x == food.x && piedra[i].y == food.y) {
+                food = comida();
+                i = 0;
+            }
+        }
         comidamp3.play();
     } else {
         //Quitamos la cola solo si no come
@@ -142,7 +184,7 @@ function dibujar() {
 
     //Game Over
     //Se pone aqui antes de remplazar la nueva cabeza
-    if (choque(newHead, snake) || choque_wall(newHead)) {
+    if (choque(newHead, snake) || choque_wall(newHead) || choque_obstaculo(piedra, newHead)) {
         muerte.play();
         // para la forma 2 ->clearInterval(game);
         ctx.fillStyle = "Red";
@@ -152,7 +194,6 @@ function dibujar() {
 
     //Se agrega la nueva Cabeza 
     snake.unshift(newHead);
-
 
     //console.log(snake.length);
     ctx.fillStyle = "white";
